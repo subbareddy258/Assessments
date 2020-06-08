@@ -7,7 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-public class POIone {
+public class CusRegExcel {  
 	public static XSSFWorkbook workbook;
 	public static XSSFSheet sheet;
 	public static FileInputStream fis;
