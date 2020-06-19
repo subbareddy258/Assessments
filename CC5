@@ -25,8 +25,7 @@ public  static String name,email,phone,age,password,hobby,gender,city,address;
 	public static WebDriver createDriver() {    //Do not change the class name
 		/* Create a driver. Assign it to static variable 'driver' and return it */
 	    /* navigate to 'http://webapps.tekstac.com/FormRegistration/UserRegistration.html'  */
-	    DriverSetup d=new DriverSetup();
-	    driver=d.getWebDriver();
+	    driver = DriverSetup.getWebDriver();
 driver.get(“http://webapps.tekstac.com/FormRegistration/UserRegistration.html”);
 	    return driver;
 	}
@@ -169,7 +168,7 @@ return text;
 	
 			 
                                   fieldLocator.createDriver();
-                                    fieldLocator. ReadFile(System.getProperty("user.dir")+"/Registration.json");
+                                    fieldLocator. readFile(System.getProperty("user.dir")+"/Registration.json");
                              fieldLocator.
                                driver.close();
 		    
