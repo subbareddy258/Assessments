@@ -1,0 +1,147 @@
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.TestNG;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+import org.testng.collections.Lists;
+import junit.framework.Assert;
+
+@Listeners(FeatureTest.class)            //DO NOT remove or alter this line. REQUIRED FOR TESTING
+public class Ex6TestNG                //DO NOT Change the class Name
+{ 
+	static WebDriver driver;
+	static String[][] excelData = null;  
+	
+	public static XSSFWorkbook workbook;
+public static XSSFSheet worksheet;
+static String SheetName = "agent";
+static XSSFRow row;
+static XSSFCell cell;
+static Select source;
+static Select destination;
+static String  name,phone,email,username;
+@BeforeSuite
+    public void createDriver(){  //DO NOT change the method signature
+	
+	    //Create driver and assign it to 'static' driver variable
+driver=DriverSetup.getWebDriver();
+	}
+	@DataProvider(name="Agent")
+	public Object[][] agentRegistration() throws Exception{   //DO NOT change the method signature
+	
+		//Parse data from Agent.xlsx, store in excelData variable and return the 2-dimensional array
+	FileInputStream inputStream = new FileInputStream(System.getProperty("user.dir")+"/Agent.xlsx");
+workbook = new XSSFWorkbook(inputStream);
+worksheet = workbook.getSheet(SheetName);
+int numRows = worksheet.getLastRowNum()+1;
+int numCols = worksheet.getRow(0).getLastCellNum();
+excelData = new String[numRows][numCols];
+for (int i = 0; i < numRows; i++) {
+row = worksheet.getRow(i);
+for (int j = 0; j < numCols; j++) {
+cell = row.getCell(j);
+DataFormatter fmt = new DataFormatter();
+String value = fmt.formatCellValue(cell);
+excelData[i][j] = value;
+   
+}
+}
+return excelData;
+	    
+	    
+	}
+@Test(priority=0,dataProvider ="Agent")
+	void testAgent (String Fname,String Lname,String Uname,String pwd, String phone, String email) throws Exception{ //DO NOT change the method signature
+		//Annotate this method with data provider name as "Agent". Add 'priority=0'
+		//Fill the form using data parsed from excel and submit
+		driver.findElement(By.name("firstname")).sendKeys(Fname);
+driver.findElement(By.name("lastname")).sendKeys(Lname);
+driver.findElement(By.name("username")).sendKeys(Uname);
+driver.findElement(By.name("password")).sendKeys(pwd);
+driver.findElement(By.name("phonenumber")).sendKeys(phone);
+driver.findElement(By.name("email")).sendKeys(email);
+driver.findElement(By.id("submit")).click();
+		
+	}
+	
+	@Test(testName="testName",priority=1)
+	void testName (){   //DO NOT change the method signature
+		    // Locate the first name in "Registered Successfully page". Assert it against the excel data.Set 'Name doesnt match 'custom failure message in assert 
+		    String name=driver.findElement(By.xpath("/html[1]/body[1]/table[1]/tbody[1]/tr[1]/td[2]")).getText();
+System.out.println(name);
+
+assertEquals("Name doesnt match", name, excelData[0][0] +" "+excelData[0][1]);
+
+
+		    
+
+    }
+	
+	@Test(testName="testUserName",priority=2)
+	void testUserName (){   //DO NOT change the method signature
+		    // Locate the user name in "Registered Successfully page". Assert it against the excel data.Set 'Username doesnt match 'custom failure message in assert
+	
+ String Username=driver.findElement(By.xpath("/html[1]/body[1]/table[1]/tbody[1]/tr[2]/td[2]")).getText();
+System.out.println(Username);
+assertEquals("Username doesnt match",Username,excelData[0][2]);}
+
+
+	@Test(testName="testPhone",priority=3)
+	void testPhone(){  //DO NOT change the method signature
+		    // Locate the phone in "Registered Successfully page". Assert it against the excel data.Set 'Phone doesnt match 'custom failure message in assert
+	 String phone =driver.findElement(By.xpath("/html[1]/body[1]/table[1]/tbody[1]/tr[3]/td[2]")).getText();
+System.out.println(phone);
+assertEquals("Phone doesnt match",phone,excelData[0][4]);
+}
+	@Test(testName="testEmail",priority=5)
+	void testEmail(){   //DO NOT change the method signature
+        // Locate the email in "Registered Successfully page". Assert it against the excel data.Set 'Email doesnt match 'custom failure message in assert
+	 String email=driver.findElement(By.xpath("/html[1]/body[1]/table[1]/tbody[1]/tr[4]/td[2]")).getText();
+System.out.println(email);
+assertEquals("Email doesnt match",email,excelData[0][5]);
+}
+	
+	public void checkAgent() {            //DO NOT change the method signature
+	    //Invoke the test using TestNG ONLY HERE.
+TestNG test= new TestNG();
+test.setTestClasses(new Class[]{
+Ex6TestNG.class});
+test.run();
+	}
+	
+	public static void main(String[] args) {
+	    Ex6TestNG ex5=new Ex6TestNG();
+	    //Add required code here
+	    
+
+ex5.checkAgent();
+
+	}
+	
+}
+	
+	
+	
+
+
