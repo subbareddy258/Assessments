@@ -1,0 +1,408 @@
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+
+public class NameLocator 
+{
+	String fName;  
+	static WebDriver driver;  
+	
+	public WebDriver setupDriver()
+	{
+	    /*Invoke the getWebDriver method from the DriverSetup File*/
+	driver= DriverSetup.getWebDriver();
+	    return driver;
+	}
+	public String getNameLocator()
+	{
+       /*Identify the Firstname
+	     Get the placeholder value
+         Store the placeholder value in the static variable fName.*/
+       setupDriver();
+ String fName= driver.findElement(By.name("fname")).getAttribute("placeholder");
+   
+       return fName;
+	}
+	
+	public static void main(String[] args)
+	{
+	    NameLocator namLocator=new NameLocator();
+	    String name=namLocator.getNameLocator();
+	    System.out.println("The name is "+name);
+	}
+
+}
+
+
+------- 2 ID LOCATOR---------
+//Add required imports
+import org.openqa.selenium.By;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+public class PageLocator    //DO NOT Change the class Name
+{
+	
+	public WebDriver createDriver()  //DO NOT change the method signature
+	{
+		WebDriver driver =DriverSetup.getWebDriver();
+		return driver;
+	   //Invoke getWebDriver method from DriverSetup and return it
+	 
+	}
+	
+	public WebElement getPageLocator(WebDriver driver)  //DO NOT change the method signature
+	{
+	   WebElement element =driver.findElement(By.id("lastname"));
+	   return element;
+	 
+	
+    
+	}
+	public String getName(WebElement element)  //DO NOT change the method signature
+	{
+		String lname= element.getAttribute("placeholder");
+	    //Get the attribute value from the element and return it
+	     return lname;
+	    
+	    
+	}
+	
+	public static void main(String[] args){
+	    PageLocator pl=new PageLocator();
+	    //Add required code
+WebDriver driver = pl.createDriver();
+WebElement element= pl.getPageLocator(driver);
+
+System.out.println(pl.getName(element));
+	  
+	  
+	  
+	}
+
+}
+
+----3 all webelements------
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.WebElement;
+
+public class Registration    //DO NOT Change the class Name
+{
+	
+static String baseUrl; //Assign the value for baseUrl
+		
+		public WebDriver createDriver()       //DO NOT change the method signature
+		{
+		   //Implement code to create Driver from DriverSetup and return it
+		   //use getWebDriver method
+		   WebDriver driver = DriverSetup.getWebDriver();
+		   return driver;
+		}
+		
+		public void navigate(WebDriver driver)   //DO NOT change the method signature
+		{
+		    // set the url to baseUrl and navigate ("http://webapps.tekstac.com/InvoiceUpdates/") 
+			 baseUrl="http://webapps.tekstac.com/InvoiceUpdates/";
+			 driver.navigate().to(baseUrl);
+			
+		    
+		}
+		
+		public Select getCategoryElement(WebDriver driver)  //DO NOT change the method signature
+		{
+		
+		   /*Replace this comment by the code statement to get the driver*/
+		   
+		   /* Select Value "Utility Invoice" from 'Category' (drop-down) and return the select element  
+	             * Declare the drop-down element as an instance of the Select class. 
+	             * Return select object    */
+	       WebElement Category =driver.findElement(By.xpath("//form[@name='myform']//table//tbody//tr//td//select"));
+	       Select select = new Select(Category);
+	   
+	       
+		return select;
+	       
+	       
+		}
+		public void setFormValues(WebDriver driver)  //DO NOT change the method signature
+		{
+		    /*Using the driver, Find the elements by id and send the values to the elements */
+	      
+	      /*  Send 'Rakesh' for 'name'  
+	               '123' for 'number'
+	                'new user' for user type 
+	                'Utility Invoice' for select 
+	                '1000' for 'amount'
+	                '9876543210' for phone 
+	                'New User Invoice' for 'comments'
+	      */ 
+	      driver.findElement(By.id("name")).sendKeys("Rakesh");
+	      driver.findElement(By.id("number")).sendKeys("123");
+	      driver.findElement(By.id("newUser")).click();
+	      Select select= getCategoryElement(driver);
+	      select.selectByValue("utility invoice");
+	      driver.findElement(By.name("amount")).sendKeys("1000");
+	      driver.findElement(By.name("num")).sendKeys("9876543210");
+	      driver.findElement(By.name("comments")).sendKeys("New User Invoice");
+	      
+	      
+		}
+		
+		public WebElement getSuccessMessageElement(WebDriver driver) //DO NOT change the method signature
+		{
+			
+		    //Get the message element and return it
+		    //After registration a success message displayed. Identify and return the WebElement of the same. 
+			driver.findElement(By.id("submit")).click();
+		WebElement  SuccessMessage =driver.findElement(By.id("result"));
+		
+		
+		return SuccessMessage;
+			
+		}
+
+		public String getSuccessMessage(WebElement element)  //DO NOT change the method signature
+		{
+			
+		    //Get the attribute value from the WebElement of success message displayed and return it.
+		
+		String sucess=	element.getText();
+		
+	
+		return sucess;
+		 
+	}
+
+    public static void main(String[] args){
+	    Registration reg=new Registration();
+	    //Add required code
+	     WebDriver driver=  reg.createDriver();
+		   reg.navigate(driver);
+		    
+		    reg.getCategoryElement(driver);
+		    reg.setFormValues(driver);
+		WebElement element=    reg.getSuccessMessageElement(driver);
+		  System.out.println(reg.getSuccessMessage(element));
+	    
+	    
+	}
+}
+
+
+----Page Navigation-------
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+
+public class NameLocator 
+{
+	static String page1, page2,page3,page4,page5,baseUrl;
+	static WebDriver driver;
+	
+	public WebDriver setupDriver()
+	{
+	    /*Replace this comment by the code statement to get the driver*/
+	   driver = DriverSetup.getWebDriver();
+	   return driver;
+	    
+	}
+		public void navigate1() 
+		{
+		    /*Replace this comment by the code statement to navigate to baseUrl */
+			baseUrl= "https://www.selenium.dev/";
+			driver.get(baseUrl);
+			
+		    
+		}
+		public void getPageTitle1()
+		{
+		    /*Replace this comment by the code statement to get page title of  "https://selenium.dev/"*/
+		    /* Assign the page title to variable 'page1' */
+	
+		page1 = driver.getTitle();
+		    
+		}
+		public void navigate2()
+		{
+		    /*Replace this comment by the code statement to navigate to https://www.google.co.in/ */
+	        driver.navigate().to("https://www.google.co.in/");
+		}
+		public void getPageTitle2()
+		{
+		    /*Replace this comment by the code statement to get page title of  https://www.google.co.in/ */
+		    /* Assign the page title to variable 'page2' */
+			
+	        page2 =driver.getTitle();
+	       
+		}
+		public void navigateBack()
+		{
+		    /*Replace this comment by the code statement to navigate back */
+			driver.navigate().back();
+	       
+		}
+		public void getPageTitle3()
+		{
+		    /*Replace this comment by the code statement to get page title of backed page */
+		    /* Assign the page title to variable 'page3' */
+	      page3=  driver.getTitle();
+	    
+		}
+		public void navigateForward()
+		{
+		    /*Replace this comment by the code statement to navigate forward */
+	      driver.navigate().forward();
+		}
+		public void getPageTitle4()
+		{
+		    /*Replace this comment by the code statement to get page title of the forwarded page */
+		    /* Assign the page title to variable 'page4' */
+		page4=	driver.getTitle();
+	
+	        
+		}
+		public void refreshPage()
+		{
+		    /*Replace this comment by the code statement to refresh the page */
+			driver.navigate().refresh();
+	       
+		}
+		public void getPageTitle5()
+		{
+		    /*Replace this comment by the code statement to get page title of refreshed page */
+		    /* Assign the page title to variable 'page5' */
+		page5 =	driver.getTitle();
+		
+		}
+
+		
+		public static void main(String[] args)
+		{
+		    NameLocator namLocator=new NameLocator();
+		    //Implement code here
+		    namLocator.setupDriver();
+		    namLocator.navigate1();
+		  namLocator.getPageTitle1();
+		
+		    namLocator.navigate2();
+		    namLocator.getPageTitle2();
+		    
+		   
+		    namLocator.navigateBack();
+		    namLocator.getPageTitle3();
+		    
+		    namLocator.navigateForward();
+		    namLocator.getPageTitle4();
+		    
+		    namLocator.refreshPage();
+		    namLocator.getPageTitle5();
+		    System.out.println(NameLocator.page1);
+		     System.out.println(NameLocator.page2);
+		     System.out.println(NameLocator.page3);
+		     System.out.println(NameLocator.page4);
+		    System.out.println(NameLocator.page5);
+		}
+
+}
+
+
+-----form registartion basics-----
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+
+public class Registration 
+{
+	String fName;
+	static WebDriver driver;
+	static String baseUrl; 
+	
+public WebDriver setupDriver()
+	{
+	    
+	    /* Invoke the getWebDriver method 
+	       Set value of BaseUrl
+	       Launch the app using get() with baseUrl */
+		
+	      driver= DriverSetup.getWebDriver();
+	      baseUrl="http://webapps.tekstac.com/Shopify/";
+	       driver.get(baseUrl);
+	       return driver;
+	       
+
+	     
+	}
+	
+	public void setElements()
+	{
+	    /*Using the driver, Find the elements by id 
+	      Set the values to the elements
+	      Register the form*/
+		driver.findElement(By.id("firstname")).sendKeys("Rahul");
+		driver.findElement(By.id("lastname")).sendKeys("Dravid");
+		driver.findElement(By.id("username")).sendKeys("Rahul Dravid");
+		driver.findElement(By.id("pass")).sendKeys("Urwish@12");
+		driver.findElement(By.id("reg")).click();
+		   
+	fName=	driver.findElement(By.xpath("//td[contains(text(),'Rahul')]")).getText();
+	System.out.println(fName);
+       
+	}
+	
+	public static void main(String[] args)
+	{
+	    Registration reg=new Registration();
+	    /* Implement the code here */
+	    reg.setupDriver();
+	    reg.setElements();
+	 
+	   
+	}
+
+}
+
+----form registartion advanced---
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+public class Registration 
+{
+	static WebDriver driver;
+	static String baseUrl; 
+	
+	public WebDriver setupDriver()
+	{
+	    //Assign the value for baseUrl
+	    /* Get the driver, and launch the app using get() with baseUrl */
+	    
+	      driver= DriverSetup.getWebDriver();
+	      baseUrl="http://webapps.tekstac.com/Shopify/";
+	       driver.get(baseUrl);
+	       return driver;
+	     
+	}
+	
+	public void setElements()
+	{
+	    /*Using the driver, Find the elements by id and send the values to the elements*/
+	    driver.findElement(By.id("firstname")).sendKeys("Mithali");
+		driver.findElement(By.id("lastname")).sendKeys("Raj");
+		driver.findElement(By.id("username")).sendKeys("Mithali Raj");
+		
+	 driver.findElement(By.id("selectcity")).sendKeys("chennai");
+		/*Select select = new Select(driver.findElement(By.id("selectcity")));
+		select.selectByVisibleText("chennai");*/
+		driver.findElement(By.xpath("//input[@value='female']")).click();
+		driver.findElement(By.id("pass")).sendKeys("MR@123");
+		driver.findElement(By.id("reg")).click();
+       
+	}
+	
+	public static void main(String[] args)
+	{
+	    Registration reg=new Registration();
+	    //Implement Code Here
+	    reg.setupDriver();
+	    reg.setElements();
+	}
+
+}
+
