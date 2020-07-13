@@ -1,0 +1,289 @@
+--CSS SELECTOR----
+//Add required imports
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+public class CSSLocator     //DO NOT change the class name
+{
+	public WebDriver createDriver()  //DO NOT change the method signature
+	{
+	   //Implement code to create Driver from DriverSetup and return it
+	   
+	  WebDriver driver= DriverSetup.getWebDriver();
+	  return driver;
+	}
+	
+	public WebElement getCSSLocator(WebDriver driver)  //DO NOT change the method signature
+	{
+	   /*Replace this comment by the code statement to get the Web element of username*/
+	   /*Find and return the element */ 
+	 WebElement element=    driver.findElement(By.cssSelector("#username"));
+	 return element;
+       
+	}
+	
+	public String getName(WebElement element)  //DO NOT change the method signature
+	{
+	    //Get the attribute value from the element and return it
+	    String name=element.getAttribute("placeholder");
+	    return name;
+	}
+	
+    public static void main(String[] args){
+	    CSSLocator pl=new CSSLocator();
+	    //Add required code
+	  WebDriver driver=  pl.createDriver();
+	  WebElement element=  pl.getCSSLocator(driver);
+	 System.out.println(pl.getName(element));
+	}
+}
+
+
+--Absolute xpath -----
+//Add required imports
+import org.openqa.selenium.By;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+public class AbsoluteXpathLocator  //DO NOT Change the class Name
+{
+	public WebDriver createDriver()
+	{
+	  WebDriver driver=  DriverSetup.getWebDriver();
+	  return driver;
+	   //Implement code to create Driver from DriverSetup and return it
+	}
+	public WebElement getAbsoluteXpathLocator(WebDriver driver)//DO NOT change the method signature
+	{
+	   /*Replace this comment by the code statement to get the Web element of logo */
+	   /*Find and return the element */ 
+	  WebElement element=   driver.findElement(By.xpath("/html/body/form/div[1]/img"));
+	  return element;
+       
+	}
+	public String getName(WebElement element)    //DO NOT change the method signature
+	{
+	    //Get the attribute value from the element and return it
+	    String name= element.getAttribute("src");
+	    return name;
+	}
+
+    public static void main(String[] args){
+	    AbsoluteXpathLocator pl=new AbsoluteXpathLocator();
+	   //Add required code    
+	   WebDriver driver= pl.createDriver();
+	   WebElement element=pl.getAbsoluteXpathLocator(driver);
+	   System.out.println(pl.getName(element));
+	}
+
+}
+
+
+---Relative Xpath---
+//Add required imports
+import org.openqa.selenium.By;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+public class RelativeXpathLocator    //DO NOT Change the class Name
+{
+	public WebDriver createDriver()    //DO NOT change the method signature
+	{
+	    WebDriver driver = DriverSetup.getWebDriver();
+		   return driver;
+	   //Implement code to create Driver from DriverSetup and return it
+	}
+	public WebElement getRelativeXpathLocator(WebDriver driver)//DO NOT change the method signature
+	{
+	   /*Replace this comment by the code statement to get the Web element */
+	   /*Find and return the element */
+	   WebElement element=  driver.findElement(By.xpath("//td[contains(text(),'SivaKumar')]"));
+	   return element;
+       
+	}
+	public String getName(WebElement element)//DO NOT change the method signature
+	{
+	    //Get the attribute value from the element and return it
+	  String name=  element.getText();
+	  return name;
+	}
+
+    public static void main(String[] args){
+	    RelativeXpathLocator pl=new RelativeXpathLocator();
+	    //Add required code
+	    WebDriver driver= pl.createDriver();
+	    WebElement element= pl.getRelativeXpathLocator(driver);
+	   System.out.println(pl.getName(element));
+	    
+	}
+}
+
+
+----Handling Regex------
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+public class NameLocator {      //DO NOT change the class name
+ 
+    public static String baseUrl; //Assign 'http://webapps.tekstac.com/Handling_Regular_Expression/' for baseUrl
+    public static WebDriver driver;
+	
+	public WebDriver createDriver()
+	{
+	    //Create driver. Assign it to static variable 'driver' and return it
+	     driver=DriverSetup.getWebDriver();
+		return driver;
+	}
+	
+	public void navigate(WebDriver driver){
+	     //Navigate to the baseUrl
+	     baseUrl="http://webapps.tekstac.com/Handling_Regular_Expression/";
+	     driver.get(baseUrl);
+	     
+	}
+	
+   public void setFormValues(WebDriver driver)
+		{
+		    //set the value for 'Shipment for user' and submit form
+			driver.findElement(By.cssSelector("#userId")).sendKeys("Shamili");
+		driver.findElement(By.cssSelector("#track")).click();	
+		}
+
+	    public WebElement getNameResultElement(WebDriver driver) {
+	        //Find the element of 'Shamili' and return it
+	      WebElement name=  driver.findElement(By.xpath("//td[contains(text(),'Shamili')]"));
+	      return name;
+	    }
+	    public WebElement getShipmentResultElement(WebDriver driver) {
+	         //Find the element of 'SHIP1236' and return it
+	    	 WebElement shipment=  driver.findElement(By.xpath("//div[@id='shipment']"));
+		      return shipment;
+	    }
+	    public WebElement getEmailResultElement(WebDriver driver) {
+	        
+	        //Find the element of 'shamili93@gamil.com' and return it
+	    	 WebElement email=  driver.findElement(By.xpath("//div[@id='e- mail']"));
+		      return email;
+	    }
+	    
+	    public boolean validateEmail(String eMailID) {
+	       //Validate email using regex. 
+	    	String regex="\\b[A-Z0-9a-z-]+@[a-z]+\\.[a-z]{2,4}\\b";
+	    	return eMailID.matches(regex);
+	    	
+	    }
+	    public boolean validateShipmentId(String shipmentId) {
+	        //Validate shipmentId using regex
+	    	String reg="[A-Z0-9]{8}";
+	    	return shipmentId.matches(reg);
+	        
+	    }    
+  
+    public static void main(String[] args)
+	{
+	    NameLocator reg=new NameLocator();
+	     //Add required code here
+	      WebDriver driver = reg.createDriver();
+	      reg.navigate(driver);
+		reg.setFormValues(driver);
+	reg.getShipmentResultElement(driver);
+    
+	
+	reg.getEmailResultElement(driver);
+	System.out.println(reg.validateEmail("shamili93@gamil.com"));
+		
+		 System.out.println(reg.validateShipmentId("SHIP1236"));
+	}
+
+  
+}
+
+
+----xpath anscetor----
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import java.util.concurrent.TimeUnit;
+
+public class NameLocator      //DO NOT Change the class name
+{
+    //Use the declared variables for stroing required values
+	static String fName;
+	static WebDriver driver;
+	
+	public WebDriver setupDriver()           //DO NOT Change the method Signature
+	{
+	    /* Replace this comment by the code statement to create and return the driver */
+	    /* Naviaget to the url 'http://webapps.tekstac.com/AddressBook/'  */
+	   driver =DriverSetup.getWebDriver();
+	    driver.get("http://webapps.tekstac.com/AddressBook/");
+	    return driver;
+	    
+	}
+	public String getNameLocator()              //DO NOT Change the method Signature
+	{
+	   /*Using the driver, Find the element ancestor and its text and assign the text to 'fName' */
+       /*Close the driver*/
+        fName= driver.findElement(By.xpath("//td[contains(text(),'NickName')]//ancestor::div")).getText();
+
+       return fName;
+      
+       
+      
+	}
+	
+	public static void main(String[] args)
+	{
+	    NameLocator namLocator=new NameLocator();
+	    //Add required code here
+	    namLocator.setupDriver();
+	    namLocator.getNameLocator();
+	    System.out.println(fName);
+	}
+
+}
+
+------Alerts----
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.Alert;
+
+public class AlertTest    //DO NOT Change the class Name
+{
+	public static WebDriver driver;
+	public WebDriver createDriver()  //DO NOT change the method signature
+	{
+	   //Implement code to create Driver from DriverSetup, assign it to 'static' variable and return it
+driver= DriverSetup.getWebDriver();
+return driver;
+	}
+	
+	public Alert getAlertElement(WebDriver driver)   //DO NOT change the method signature
+	{
+	    //Find the 'click' buttton and click it.
+	    //Locate the 'Alert' element and return it
+	    driver.findElement(By.name("submit")).click();
+	  Alert alert=  driver.switchTo().alert();
+	  System.out.println(alert.getText());
+	 	  
+	 	  return alert;
+	 
+	  
+	    
+	}
+
+	public static void main(String[] args)  throws InterruptedException  //DO NOT change the method signature
+	{      
+	    AlertTest at=new AlertTest();
+	    //Implement code here
+	   at.createDriver();
+	    at.getAlertElement(driver);
+
+	}
+
+}
+
+
