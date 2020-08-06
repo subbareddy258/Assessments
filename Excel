@@ -1,0 +1,239 @@
+package com.readfromconfig;
+
+import java.io.File;
+
+import java.io.FileInputStream;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.poi.ss.usermodel.Cell;
+
+import org.apache.poi.ss.usermodel.Row;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class ReadFromExcel2 {
+	public static final String dataFile = "C:\\Users\\subbareddy.k\\eclipse-workspace\\com.modifications\\Excel\\test2.xlsx";
+	public static WebDriverWait wait;
+	public static WebElement element;
+	public static FileInputStream fis;
+	public static WebDriver driver;
+	public static XSSFWorkbook workbook;
+	public static XSSFSheet sheet;
+	public static XSSFRow row;
+
+	public ReadFromExcel2(WebDriver driver) {
+		ReadFromExcel2.driver = driver;
+
+	}
+
+	Map<String, ArrayList<String>> hashmap = new LinkedHashMap<String, ArrayList<String>>();
+	Map<String, ArrayList<String>> uihashmap = new LinkedHashMap<String, ArrayList<String>>();
+
+	public void LoadExcel() throws IOException, Exception {
+		File file = new File(dataFile);
+
+		fis = new FileInputStream(file);
+
+		workbook = new XSSFWorkbook(fis);
+		int sheetCount = workbook.getNumberOfSheets();
+
+		Row RowValue;
+		wait = new WebDriverWait(driver, 10);
+		element = wait
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Calendar')]")));
+		element.click();
+	//	int Eventcolumn = 0,Desccolumn = 0,Day = 0, Month = 0,year = 0,hour = 0,Minute = 0,k = 0,m = 0,n = 0,o = 0, p = 0,q = 0,r = 0;
+		String monthname = null,s = null, K = null,yearname = null,dayname = null;
+		for (int i = 0; i < sheetCount; i++) {
+			if (workbook.getSheetName(i).equalsIgnoreCase("Testdata")) {
+				XSSFSheet sheet = workbook.getSheetAt(i);
+				Iterator<Row> rows = sheet.iterator();
+				Row firstRow = rows.next();
+				Iterator<Cell> cells = firstRow.cellIterator();
+//				Cell firstRowCells;
+//				while (cells.hasNext()) {
+//					firstRowCells = cells.next();
+//					if (firstRowCells.getStringCellValue().equalsIgnoreCase("event")) {
+//						Eventcolumn = k;
+//					} else
+//
+//						k++;
+//
+//					if (firstRowCells.getStringCellValue().equalsIgnoreCase("Description")) {
+//						Desccolumn = m;
+//					} else
+//
+//						m++;
+//					if (firstRowCells.getStringCellValue().equalsIgnoreCase("Day")) {
+//						Day = n;
+//					} else
+//
+//						n++;
+//					if (firstRowCells.getStringCellValue().equalsIgnoreCase("Month")) {
+//						Month = o;
+//					} else
+//
+//						o++;
+//					if (firstRowCells.getStringCellValue().equalsIgnoreCase("year")) {
+//						year = p;
+//					} else
+//
+//						p++;
+//					if (firstRowCells.getStringCellValue().equalsIgnoreCase("hour")) {
+//						hour = q;
+//					} else
+//
+//						q++;
+//					if (firstRowCells.getStringCellValue().equalsIgnoreCase("Minute")) {
+//						Minute = r;
+//					} else
+//
+//						r++;
+//				}
+
+				rows = sheet.iterator();
+				firstRow = rows.next();
+				cells = firstRow.cellIterator();
+
+				while (rows.hasNext()) {
+
+					if (cells.hasNext()) {
+						ArrayList<String> Days = new ArrayList<String>();
+						ArrayList<String> ui = new ArrayList<String>();
+						System.out.println("Event Creation started");
+
+						wait = new WebDriverWait(driver, 10);
+						element = wait.until(
+								ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@value='New event']")));
+						element.click();
+
+						RowValue = rows.next();
+						String EventName = RowValue.getCell(0).getStringCellValue();
+
+						driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+						driver.findElement(By.id("id_name")).sendKeys(EventName);
+
+						String DescName = RowValue.getCell(1).getStringCellValue();
+
+						driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+						driver.findElement(By.id("id_descriptioneditable")).sendKeys(DescName);
+
+						Days.add(DescName);
+
+						dayname = (String) RowValue.getCell(2).getStringCellValue();
+						Select Select = new Select(driver.findElement(By.id("id_timestart_day")));
+						Select.selectByVisibleText(dayname);
+
+						monthname = RowValue.getCell(3).getStringCellValue();
+						Select Select1 = new Select(driver.findElement(By.id("id_timestart_month")));
+						Select1.selectByVisibleText(monthname);
+
+						yearname = RowValue.getCell(4).getStringCellValue();
+						Select select2 = new Select(driver.findElement(By.id("id_timestart_year")));
+						select2.selectByVisibleText(yearname);
+						WebElement option2 = select2.getFirstSelectedOption();
+						String defaultItem2 = option2.getText();
+						s = dayname + " " + monthname + " " + defaultItem2;
+						Days.add(s);
+
+						String hourname = RowValue.getCell(5).getStringCellValue();
+						Select select3 = new Select(driver.findElement(By.id("id_timestart_hour")));
+						select3.selectByVisibleText(hourname);
+
+						String minute = RowValue.getCell(6).getStringCellValue();
+						Select select4 = new Select(driver.findElement(By.id("id_timestart_minute")));
+
+						select4.selectByVisibleText(minute);
+						K = hourname + ":" + minute;
+
+						Days.add(K);
+
+						driver.findElement(By.id("id_repeat")).click();
+
+						wait = new WebDriverWait(driver, 10);
+						element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("id_repeats")));
+						element.clear();
+						element.sendKeys("5");
+						wait = new WebDriverWait(driver, 10);
+						element = wait.until(ExpectedConditions
+								.visibilityOfElementLocated(By.xpath("//input[@value='Save changes']")));
+						element.click();
+
+						// UI DATA
+
+						String uipath = driver.findElement(By.xpath("//h3[@class='name d-inline-block']")).getText();
+
+						Thread.sleep(3000);
+						String V = driver
+								.findElement(By.xpath("//div[@class='description card-block calendar_event_user']"))
+								.getText();
+						ui.add(V);
+						String Eventname = driver.findElement(By.xpath("//span[@class='current']")).getText();
+
+						String day = "^Sunday,|Monday,|Tuesday,|Wednesday,|Thursday,|Friday,|Saturday,|$";
+						String dya = Eventname.replaceAll(day, "").trim();
+						ui.add(dya);
+
+						String minutes = driver.findElement(By.xpath("//span[@class='date pull-xs-right m-r-1']"))
+								.getText();
+
+						SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
+						SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
+						Date date = parseFormat.parse(minutes);
+
+						ui.add(displayFormat.format(date));
+						// UI DATA STORING IN HASHMAP AND ARRAYLIST
+
+						uihashmap.put(uipath, ui);
+						// System.out.println("ui hashmap" + uihashmap);
+
+						// EXCEL DATA STORING IN HASHMAP AND ARRAYLIST
+
+						hashmap.put(EventName, Days);
+						System.out.println(hashmap);
+						System.out.println(uihashmap);
+						System.out.println("Event creation ended and data stored in hashmap");
+
+					}
+				}
+
+			}
+
+		}
+		for (Map.Entry entry : hashmap.entrySet()) {
+			System.out.println(entry.getKey() + " : " + entry.getValue());
+		}
+//		for (String key : hashmap.keySet()) {
+//		    System.out.println("Key: " + key + ", Value: " + hashmap.get(key));
+//		}
+
+		for (Map.Entry entry : uihashmap.entrySet()) {
+			System.out.println("uihashmap " + entry.getKey() + " : " + entry.getValue());
+		}
+		if (hashmap.equals(uihashmap)) {
+			System.out.println("passed");
+		} else {
+			System.out.println("failed");
+		}
+	}
+
+}
